@@ -1,0 +1,9 @@
+{"key":"",
+"url":"https://appcenterhq.com",
+"ListGroup":"/api1/groups",
+"AddGroup":"/api1/groups/add",
+"GroupDetails":"/api1/groups/",
+"UsersInGroup":"/api1/groups/%s/users",
+"AppEcosystem":"/api1/apps/%s/ecosystem/wrap_info",
+"ListApps":"/appstore/acapi1/apps/list.json"
+}
