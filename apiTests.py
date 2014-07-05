@@ -12,6 +12,7 @@ except ImportError, e:
   pass
 
 import json
+import urllib
 
 class AppCenter:
   "class for testing the User api"
@@ -36,18 +37,28 @@ class AppCenter:
     self.UsersInGroup = data["UsersInGroup"]
     self.Ecosystem = data["AppEcosystem"]
     self.ListAppsURL = data["ListApps"]
+    self.AddUserURL = data["AddUser"]
     self.Groups = None
     if self.key == "":
         self.key = self.getTempKey()
-    self.payload = {'api_key':self.key}
+    self.payload = {"api_key" : self.key}
     jsondata.close()
 
   def getTempKey(self):
     uname = raw_input('username: ')
     passw = raw_input('password: ')
     postdata = {'username' : uname, 'password' : passw}
-    keydata = json.loads(requests.post(self.url+"/api1/login", postdata).content)
-    return keydata['api-key']
+    res = requests.post(self.url+"/api1/login", postdata)
+    keydata = json.loads(res.content)
+    try:
+      return keydata['api-key']
+    except KeyError:
+      if str(res.status_code) == "401":
+        print "Invalid Credentials"
+      elif str(res.status_code) == "404":
+        print "No Permission To Use The API"
+      else:
+        print "Hmmmm...somethings wrong here"
   
   def getGroupPayload(self):
     req = requests.get(self.url+self.ListGroupURL, params=self.payload)
@@ -71,10 +82,44 @@ class AppCenter:
   def getAppList(self):
     appListUrl = self.ListAppsURL
     req = requests.get(self.url+appListUrl, params=self.payload)
-    self.Apps = json.loads(req.text)
+    self.Apps = req.text
+    print req.text
 
   def getAppPackBund(self):
     appPackBund = []
     for app in self.Apps:
         appPackBund.append(app['packbund'])
     return appPackBund
+
+  def listGroupNames(self):
+    if self.Groups is None:
+      self.getGroupPayload()
+      self.groupNames = self.Groups["groups"]
+
+    for g in self.groupNames:
+      print g['name']
+
+  def listGroupIds(self):
+    if self.Groups is None:
+      self.getGroupPayload()
+      self.groupIds = self.Groups["groups"]
+
+    for g in self.groupIds:
+      print g['id']
+
+  def addUserManually(self):
+    uname = raw_input("username: ")
+    fname = raw_input("first name: ")
+    lname = raw_input("last name: ")
+    email = raw_input("email: ")
+    passwd = raw_input("password (optional): ")
+    if passwd == "" :
+        userPayload = {'username' : uname, 'first_name' : fname, 'last_name' : lname, 'email' : email}
+    else:
+        userPayload = {'username' : uname, 'first_name' : fname, 'last_name' : lname, 'email' : email, 'password' : passwd }
+    userPayload = json.dumps(userPayload)
+    print userPayload
+    req = requests.post(self.url+self.AddUserURL, data=userPayload, params=self.payload)
+    print req.text
+
+
