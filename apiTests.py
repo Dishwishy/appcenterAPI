@@ -153,11 +153,6 @@ class AppCenter:
             self.groupNames = self.Groups["groups"]
             return self.groupNames
 
-    def getWrapEcosystem(self, appID):
-        appEcoUrl = self.Ecosystem
-        appEcoUrl = appEcoUrl % (appID)
-        req = requests.get(self.url + appEcoUrl)
-        print req.text
 
     def getAppList(self):
         appListUrl = self.ListAppsURL
