@@ -196,7 +196,6 @@ class AppCenter:
             userPayload = {'username': uname, 'first_name': fname, 'last_name': lname, 'email': email,
                            'password': passwd}
         userPayload = json.dumps(userPayload)
-        print userPayload
         self.post(self.url+self.AddUserURL, userPayload)
 
 
