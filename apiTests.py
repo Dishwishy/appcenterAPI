@@ -161,10 +161,13 @@ class AppCenter:
         print req.text
 
     def getAppPackBund(self):
-        appPackBund = []
-        for app in self.Apps:
-            appPackBund.append(app['packbund'])
-        return appPackBund
+        if self.Apps:
+            appPackBund = []
+            for app in self.Apps:
+                appPackBund.append(app['packbund'])
+            return appPackBund
+        else:
+            self.getAppList()
 
     def listGroupNames(self):
         if self.Groups is None:
@@ -196,7 +199,7 @@ class AppCenter:
             userPayload = {'username': uname, 'first_name': fname, 'last_name': lname, 'email': email,
                            'password': passwd}
         userPayload = json.dumps(userPayload)
-        self.post(self.url+self.AddUserURL, userPayload)
+        self.post(self.url+self.AddUserURL, str(userPayload))
 
 
 
