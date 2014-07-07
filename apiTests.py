@@ -174,7 +174,8 @@ class AppCenter:
     def listGroupNames(self):
         if self.Groups is None:
             self.getGroupPayload()
-            self.groupNames = self.Groups["groups"]
+
+        self.groupNames = self.Groups["groups"]
 
         for g in self.groupNames:
             print g['name']
@@ -182,7 +183,8 @@ class AppCenter:
     def listGroupIds(self):
         if self.Groups is None:
             self.getGroupPayload()
-            self.groupIds = self.Groups["groups"]
+
+        self.groupIds = self.Groups["groups"]
 
         for g in self.groupIds:
             print "%(id)s: %(name)s" % g
@@ -200,8 +202,10 @@ class AppCenter:
                            'password': passwd}
         userPayload = json.dumps(userPayload)
         print userPayload
-        req = requests.post(self.url + self.AddUserURL, data=userPayload)
-        print req.text
+        self.post(self.url+self.AddUserURL, userPayload)
+
+
+
 
 
 if __name__ == "__main__":
