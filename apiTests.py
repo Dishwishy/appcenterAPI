@@ -118,6 +118,7 @@ class AppCenter:
             req = requests.get(url)
         elif verb == 'POST':
             req = requests.post(url, params)
+            print req.text
 
         if 'x-nukona-status' not in req.headers:
             raise self.InvalidAPIResponse('No "x-nukona-status" header in response.')
@@ -201,6 +202,11 @@ class AppCenter:
         userPayload = json.dumps(userPayload)
         self.post(self.url+self.AddUserURL, str(userPayload))
 
+    def addGroupManually(self):
+        gname = raw_input("group name: ")
+        groupPayload = {'name': str(gname)}
+        groupPayload = json.dumps(groupPayload)
+        self.post(self.url+self.AddGroupURL, groupPayload)
 
 
 
